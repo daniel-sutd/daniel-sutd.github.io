@@ -4,7 +4,7 @@
     height:400px; 
 } 
 
-.matrixCanvas {
+.ResultCanvas {
     border: 2px solid black;
     position: absolute;
     left: 0px;
@@ -22,38 +22,45 @@ body {
     padding: 0px;
 }
 
-.typeSlider {
-    position: absolute;
-    left: 0px;
-    top: 310px;
-    width: 240px;
-}
-
 .alphaSlider {
     position: absolute;
     left: 0px;
-    top: 340px;
+    top: 354px;
     width: 240px;
 }
 
 .betaSlider {
     position: absolute;
     left: 0px;
-    top: 370px;
+    top: 384px;
     width: 240px;
 }
 
 
-.pSlider {
+.fSlider {
     position: absolute;
     left: 0px;
-    top: 400px;
+    top: 414px;
+    width: 240px;
+}
+
+.DSlider {
+    position: absolute;
+    left: 0px;
+    top: 444px;
     width: 240px;
 }
 
 .nSlider {
     position: absolute;
     left: 0px;
-    top: 430px;
+    top: 474px;
+    width: 240px;
+}
+
+.typeSlider {
+    position: absolute;
+    left: 0px;
+    top: 514px;
     width: 240px;
 }
