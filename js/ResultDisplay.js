@@ -49,20 +49,34 @@ class ResultDisplay {
         context.fillText(this.getDepositChange(casperSF, casperSF.numValidators-1),186,ResultDisplay.BASE_Y+106);
         context.fillText("Finalization epoch: "+casperSF.getFinalizationEpoch(), 180,ResultDisplay.BASE_Y+130);
         
-        // botom
+        // yearly interest
         context.beginPath();
         context.moveTo(18,ResultDisplay.BASE_Y+144);
         context.lineTo(400,ResultDisplay.BASE_Y+144);
         context.stroke();
         
-        context.fillText("Interpretation:", 20, ResultDisplay.BASE_Y+164);
-        context.fillText("alpha: base interest factor", 24, ResultDisplay.BASE_Y+182);
-        context.fillText("beta: base penalty factor", 24, ResultDisplay.BASE_Y+200);
-        context.fillText("every epoch, the first f validators vote, others do not", 24, ResultDisplay.BASE_Y+218);
-        context.fillText("currently, only 'type' is uniform distribution of deposits:", 24, ResultDisplay.BASE_Y+236);
-        context.fillText(" i.e., 100 validators, each with initial deposit of size D", 24, ResultDisplay.BASE_Y+254);
-        context.fillText("Pareto distriution is also in Casper.js, but disabled", 24, ResultDisplay.BASE_Y+272);
+        var numEpochsInYear = (365.25 * 24 * 3600) / SliderDisplay.SECONDS_PER_EPOCH;
+        var estimatedInterest = Math.pow(1 + this.getDepositChange(casperMC, casperMC.numValidators-1), numEpochsInYear/n);
+        
+        context.fillText("Estimates based on majority voter on main chain: ", 24, ResultDisplay.BASE_Y+162);
+        context.fillText("yearly interest: "+((estimatedInterest)-1)*100+"%", 30, ResultDisplay.BASE_Y+180);
+        context.fillText("deposit scale factor (epoch n): "+casperMC.depositScaleFactor, 30, ResultDisplay.BASE_Y+198);
+        
+         // explanation
+        context.beginPath();
+        context.moveTo(18,ResultDisplay.BASE_Y+204);
+        context.lineTo(400,ResultDisplay.BASE_Y+204);
+        context.stroke();
+        
+        context.fillText("Interpretation:", 20, ResultDisplay.EXPLANATION_Y+164);
+        context.fillText("alpha: base interest factor", 24, ResultDisplay.EXPLANATION_Y+182);
+        context.fillText("beta: base penalty factor", 24, ResultDisplay.EXPLANATION_Y+200);
+        context.fillText("every epoch, the last f validators vote, others do not", 24, ResultDisplay.EXPLANATION_Y+218);
+        context.fillText("currently, only 'type' is uniform distribution of deposits:", 24, ResultDisplay.EXPLANATION_Y+236);
+        context.fillText(" i.e., 100 validators, each with initial deposit of size D", 24, ResultDisplay.EXPLANATION_Y+254);
+        context.fillText("Pareto distriution is also in Casper.js, but disabled", 24, ResultDisplay.EXPLANATION_Y+272);
     }
 }
 
 ResultDisplay.BASE_Y = 68;
+ResultDisplay.EXPLANATION_Y = 124;

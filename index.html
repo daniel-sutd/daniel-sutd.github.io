@@ -4,17 +4,19 @@
         <meta charset="utf-8"/>
         <link rel="stylesheet" type="text/css" href="main.css">
         <script src="js/Casper.js"></script>
-        <script src="js/MatrixDisplay.js"></script>
+        <script src="js/ResultDisplay.js"></script>
         <script src="js/SliderDisplay.js"></script>
     </head>
     <body> 
-        <input id="typeSlider" class="typeSlider" type="range" min="0" max="2" value = "0" step="1" />
-        <input id="nSlider" class="nSlider" type="range" min="0" max="100" value = "0" step="any" />
-        <input id="pSlider" class="pSlider" type="range" min="0" max="100" value = "0" step="any" />
         <input id="alphaSlider" class="alphaSlider" type="range" min="0" max="100" value = "0" step="any" />
         <input id="betaSlider" class="betaSlider" type="range" min="0" max="100" value = "0" step="any" />
-        <canvas id="matrixCanvas" class="matrixCanvas" width="600" height="300"></canvas>
-        <canvas id="sliderCanvas" class="sliderCanvas" width="300" height="460"></canvas>
+        <input id="fSlider" class="fSlider" type="range" min="0" max="100" value = "0" step="any" />
+        <input id="nSlider" class="nSlider" type="range" min="0" max="100" value = "0" step="any" />
+        <input id="DSlider" class="DSlider" type="range" min="0" max="100" value = "0" step="any" />
+        
+        <input id="typeSlider" class="typeSlider" type="range" min="0" max="0" value = "0" step="1" />
+        <canvas id="ResultCanvas" class="ResultCanvas" width="424" height="400"></canvas>
+        <canvas id="sliderCanvas" class="sliderCanvas" width="300" height="600"></canvas>
         <script src="js/Controls.js"></script>
     </body>
 </html>
