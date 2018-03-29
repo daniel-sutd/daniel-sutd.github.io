@@ -13,7 +13,7 @@ class SliderDisplay {
         
         context.fillText("alpha: "+ alpha,6,SliderDisplay.BASE_Y+15);
         context.fillText("beta: "+beta,6,SliderDisplay.BASE_Y+45);
-        context.fillText("f: "+p,6,SliderDisplay.BASE_Y+75);
+        context.fillText("f: "+(p*100)+"%",6,SliderDisplay.BASE_Y+75);
         context.fillText("D: "+D,6,SliderDisplay.BASE_Y+105);
         context.fillText("n: "+n+" ("+SliderDisplay.timeAtEpoch(n)+")",6,SliderDisplay.BASE_Y+135);
         
