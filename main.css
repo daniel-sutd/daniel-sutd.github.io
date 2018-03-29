@@ -1,0 +1,59 @@
+#filecontents { 
+    border:double; 
+    overflow-y:scroll; 
+    height:400px; 
+} 
+
+.matrixCanvas {
+    border: 2px solid black;
+    position: absolute;
+    left: 0px;
+    top: 0x;
+}
+
+.sliderCanvas {
+    position: absolute;
+        top: 370x;
+    left: 260px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.typeSlider {
+    position: absolute;
+    left: 0px;
+    top: 310px;
+    width: 240px;
+}
+
+.alphaSlider {
+    position: absolute;
+    left: 0px;
+    top: 340px;
+    width: 240px;
+}
+
+.betaSlider {
+    position: absolute;
+    left: 0px;
+    top: 370px;
+    width: 240px;
+}
+
+
+.pSlider {
+    position: absolute;
+    left: 0px;
+    top: 400px;
+    width: 240px;
+}
+
+.nSlider {
+    position: absolute;
+    left: 0px;
+    top: 430px;
+    width: 240px;
+}
