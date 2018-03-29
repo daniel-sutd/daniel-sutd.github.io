@@ -9,14 +9,12 @@ class Casper {
         this.baseInterestFactor = baseInterestFactor;
         this.basePenaltyFactor = basePenaltyFactor;
 
+        this.rewardFactor = 0;
         this.depositScaleFactor = Casper.INITIAL_SCALE_FACTOR;
-        this.rewardFactor = 0; // the initial value has some impact during the first epoch because it impacts the deposit factor rescale
 
         this.totalVoteUnscaled = 0;
         this.epoch = 0;
-        this.lastJustifiedEpoch = 0;
-        this.lastFinalizedEpoch = -1;
-        this.finalizationEpoch = 0;
+        this.ESF = 1;
         
         this.D = D;
         this.f = f;
@@ -24,6 +22,9 @@ class Casper {
         
         this.initFraction(D, f, setting);
         this.initDeposits(D, setting);
+        
+        //console.log(this.validatorDeposits);
+        //console.log(this.validatorVoteProbs);
 	}
 	
 	initFraction(D, f, setting) {
@@ -109,23 +110,14 @@ class Casper {
 		return result;
 	}
     
-    getESF() {
-        return this.epoch - this.lastFinalizedEpoch;
-    }
-    
     getCollectiveReward() {
         var votePercentage = this.totalVoteUnscaled/this.getTotalDepositsUnscaled();
-		if(this.getESF() > 2) votePercentage = 0;
+		if(this.ESF >= 2) votePercentage = 0;
         return votePercentage;
     }
     
     getScaledDeposit(i) {
         return this.validatorDeposits[i] * this.depositScaleFactor;
-    }
-    
-    getFinalizationEpoch() {
-        if(this.getESF() == 1) return this.finalizationEpoch;
-        else return "not finalized";
     }
 	
 	processEpoch() {
@@ -140,7 +132,7 @@ class Casper {
 		this.depositScaleFactor = this.depositScaleFactor * (1 + this.getCollectiveReward()*this.rewardFactor/2 - this.rewardFactor);
 		
 		// update reward factor
-		this.rewardFactor = this.baseInterestFactor/Math.sqrt(this.getTotalDepositsUnscaled() * this.depositScaleFactor) + this.basePenaltyFactor * this.getESF(); 
+		this.rewardFactor = this.baseInterestFactor/Math.sqrt(this.getTotalDepositsUnscaled() * this.depositScaleFactor) + this.basePenaltyFactor * this.ESF; 
 		
 		// update deposits
 		this.totalVoteUnscaled = 0;
@@ -149,20 +141,22 @@ class Casper {
 				this.validatorDeposits[i] += this.validatorDeposits[i] * this.rewardFactor;
 				this.totalVoteUnscaled += this.validatorDeposits[i];
 			}
-            // check for justification/finalization
-            if(this.totalVoteUnscaled/this.getTotalDepositsUnscaled() > 2./3 && this.lastJustifiedEpoch < this.epoch) {
-                if(this.lastJustifiedEpoch == this.epoch-1) {
-                    if(this.epoch - this.lastFinalizedEpoch >= 3) this.finalizationEpoch = this.epoch; // just for tracing purposes
-                    this.lastFinalizedEpoch = this.epoch-1;
-                }
-                this.lastJustifiedEpoch = this.epoch;
-            }
+		}
+		
+		if(this.totalVoteUnscaled/this.getTotalDepositsUnscaled() > 2./3) {
+			this.ESF = 1;
+		} else {
+			this.ESF++;
 		}
 	}
     
     processEpochs(n) {
         for(var i=0;i<n;i++) {
             this.processEpoch();
+        }
+        var scaledDeps = [];
+        for(var i=0;i<this.numValidators;i++) {
+            scaledDeps[i] = this.validatorDeposits[i] * this.depositScaleFactor;
         }
     }
 }
@@ -172,5 +166,3 @@ Casper.PARETO4LOG5 = 1;
 Casper.PARETO4LOG5REV = 2;
 
 Casper.INITIAL_SCALE_FACTOR = 10000000000;
-
-Casper.BASE_NUM_VALIDATORS = 100;
