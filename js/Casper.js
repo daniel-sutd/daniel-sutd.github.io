@@ -115,10 +115,11 @@ class Casper {
     }
     
     getCollectiveReward() {
-        if(this.epoch == 1) return 1;
+        // relevant for the first epoch, we are assuming the fork in something close to steady-state
+        if(this.epoch == 1) return this.rewardFactor/2;
         var votePercentage = this.totalVoteUnscaled/this.getTotalDepositsUnscaled();
 		if(this.getESF() > 2) votePercentage = 0;
-        return votePercentage;
+        return votePercentage*this.rewardFactor/2;
     }
     
     getScaledDeposit(i) {
@@ -139,7 +140,7 @@ class Casper {
 		}
 		
 		// update scale factor
-		this.depositScaleFactor = this.depositScaleFactor * (1 + this.getCollectiveReward()*this.rewardFactor/2 - this.rewardFactor);
+		this.depositScaleFactor = this.depositScaleFactor * (1 + this.getCollectiveReward())/(1 + this.rewardFactor);
 		
 		// update reward factor
 		this.rewardFactor = this.baseInterestFactor/Math.sqrt(this.getTotalDepositsUnscaled() * this.depositScaleFactor) + this.basePenaltyFactor * this.getESF(); 
@@ -161,6 +162,10 @@ class Casper {
             }
 		}
 	}
+    
+    getDepositChange(idx) {
+        return (this.getScaledDeposit(idx)/Casper.INITIAL_SCALE_FACTOR)/this.validatorInitDeposits[idx] - 1;
+    }
     
     processEpochs(n) {
         for(var i=0;i<n;i++) {

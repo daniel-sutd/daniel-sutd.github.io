@@ -4,10 +4,6 @@ class ResultDisplay {
         
     }
     
-    getDepositChange(casper, idx) {
-        return (casper.getScaledDeposit(idx)/Casper.INITIAL_SCALE_FACTOR - casper.validatorInitDeposits[idx])/casper.validatorInitDeposits[idx];
-    }
-    
     redraw(type, alpha, beta, f, n, D) {
         var canvas = document.getElementById('ResultCanvas');
         var context = canvas.getContext('2d');
@@ -41,12 +37,12 @@ class ResultDisplay {
         context.fillText("Majority:",116,ResultDisplay.BASE_Y+82);
         context.fillText("Minority:",116,ResultDisplay.BASE_Y+106);
         
-        context.fillText(this.getDepositChange(casperMC, casperMC.numValidators-1),186,ResultDisplay.BASE_Y-8);
-        context.fillText(this.getDepositChange(casperMC, 0),186,ResultDisplay.BASE_Y+16);
+        context.fillText(casperMC.getDepositChange(casperMC.numValidators-1),186,ResultDisplay.BASE_Y-8);
+        context.fillText(casperMC.getDepositChange(0),186,ResultDisplay.BASE_Y+16);
         context.fillText("Finalization epoch: "+casperMC.getFinalizationEpoch(), 180,ResultDisplay.BASE_Y+40);
         
-        context.fillText(this.getDepositChange(casperSF, 0),186,ResultDisplay.BASE_Y+82);
-        context.fillText(this.getDepositChange(casperSF, casperSF.numValidators-1),186,ResultDisplay.BASE_Y+106);
+        context.fillText(casperSF.getDepositChange(0),186,ResultDisplay.BASE_Y+82);
+        context.fillText(casperSF.getDepositChange(casperSF.numValidators-1),186,ResultDisplay.BASE_Y+106);
         context.fillText("Finalization epoch: "+casperSF.getFinalizationEpoch(), 180,ResultDisplay.BASE_Y+130);
         
         // yearly interest
@@ -56,7 +52,7 @@ class ResultDisplay {
         context.stroke();
         
         var numEpochsInYear = (365.25 * 24 * 3600) / SliderDisplay.SECONDS_PER_EPOCH;
-        var estimatedInterest = Math.pow(1 + this.getDepositChange(casperMC, casperMC.numValidators-1), numEpochsInYear/n);
+        var estimatedInterest = Math.pow(1 + casperMC.getDepositChange(casperMC.numValidators-1), numEpochsInYear/n);
         
         context.fillText("Estimates based on majority voter on main chain: ", 24, ResultDisplay.BASE_Y+162);
         context.fillText("yearly interest: "+((estimatedInterest)-1)*100+"%", 30, ResultDisplay.BASE_Y+180);
