@@ -1,0 +1,2 @@
+This is an old version, using the scale factor update in the Casper contract from before this update:
+https://github.com/ethereum/casper/issues/64
