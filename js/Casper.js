@@ -11,6 +11,7 @@ class Casper {
 
         this.depositScaleFactor = Casper.INITIAL_SCALE_FACTOR;
         // the initial value has some impact during the first epoch because it impacts the deposit factor rescale:
+        this.prevDepositScaleFactor = this.depositScaleFactor;
         this.rewardFactor = this.baseInterestFactor/Math.sqrt(D*numValidators * this.depositScaleFactor) + this.basePenaltyFactor * 2; 
 
         this.totalVoteUnscaled = 0;
@@ -123,7 +124,7 @@ class Casper {
     }
     
     getScaledDeposit(i) {
-        return this.validatorDeposits[i] * this.depositScaleFactor;
+        return this.validatorPrevDeposits[i] * this.depositScaleFactor;
     }
     
     getFinalizationEpoch() {
@@ -136,14 +137,15 @@ class Casper {
 		// record deposit values for analysis purposes
 		for(var i=0; i<this.numValidators; i++) {
 			// include the scale factor to incorporate per-epoch changes 
-			this.validatorPrevDeposits[i] = this.validatorDeposits[i] * this.depositScaleFactor;
+			this.validatorPrevDeposits[i] = this.validatorDeposits[i];
 		}
 		
 		// update scale factor
+        this.prevDepositScaleFactor = this.depositScaleFactor;
 		this.depositScaleFactor = this.depositScaleFactor * (1 + this.getCollectiveReward())/(1 + this.rewardFactor);
 		
 		// update reward factor
-		this.rewardFactor = this.baseInterestFactor/Math.sqrt(this.getTotalDepositsUnscaled() * this.depositScaleFactor) + this.basePenaltyFactor * this.getESF(); 
+		this.rewardFactor = this.baseInterestFactor/Math.sqrt(this.getTotalDepositsUnscaled() * this.prevDepositScaleFactor) + this.basePenaltyFactor * this.getESF(); 
 		
 		// update deposits
 		this.totalVoteUnscaled = 0;
@@ -168,8 +170,11 @@ class Casper {
     }
     
     processEpochs(n) {
+        //var z = this.numValidators - 1;
         for(var i=0;i<n;i++) {
             this.processEpoch();
+            //console.log(i+" "+this.depositScaleFactor+" "+this.validatorPrevDeposits[z]);
+            //console.log((i+1./3)+" "+this.depositScaleFactor+" "+this.validatorDeposits[z]);
         }
     }
 }
