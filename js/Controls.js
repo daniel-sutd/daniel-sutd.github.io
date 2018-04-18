@@ -2,7 +2,7 @@ initSlider = function() {
     //document.getElementById('pSlider').value = 100 * trace.getCurrentTime() / (trace.maxTime - trace.minTime);
     
     document.getElementById('fSlider').value = 34;
-    document.getElementById('alphaSlider').value = 100 - 10*(3 + Math.log(0.01)/Math.log(0.1));
+    document.getElementById('alphaSlider').value = 100 - 10*(3 + Math.log(0.1)/Math.log(0.1));
     document.getElementById('betaSlider').value = 100 - 10*(3 + Math.log(0.0001)/Math.log(0.1));
     document.getElementById('nSlider').value = 20*Math.log(167.5)/Math.log(10);
     document.getElementById('DSlider').value = 12*Math.log(14999.5)/Math.log(10);
