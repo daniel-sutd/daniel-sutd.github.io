@@ -1,10 +1,10 @@
 initSlider = function() {
     //document.getElementById('pSlider').value = 100 * trace.getCurrentTime() / (trace.maxTime - trace.minTime);
     
-    document.getElementById('fSlider').value = 34;
+    document.getElementById('fSlider').value = 100;
     document.getElementById('alphaSlider').value = 100 - 10*(3 + Math.log(0.007)/Math.log(0.1));
     document.getElementById('betaSlider').value = 100 - 10*(3 + Math.log(0.0000002)/Math.log(0.1));
-    document.getElementById('nSlider').value = 20*Math.log(167.5)/Math.log(10);
+    document.getElementById('nSlider').value = 20*Math.log(45082)/Math.log(10);
     document.getElementById('DSlider').value = 12*Math.log(99999.5)/Math.log(10);
     document.getElementById('typeSlider').value = 0;
     //console.log((Math.log(0.0001)/Math.log(0.1)+3)*10);

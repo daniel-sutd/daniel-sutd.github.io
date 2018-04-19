@@ -9,10 +9,10 @@ class Casper {
         this.baseInterestFactor = baseInterestFactor;
         this.basePenaltyFactor = basePenaltyFactor;
 
+        this.rewardFactor = this.baseInterestFactor/Math.sqrt(D*numValidators); 
         this.depositScaleFactor = Casper.INITIAL_SCALE_FACTOR;
         // the initial value has some impact during the first epoch because it impacts the deposit factor rescale:
         this.prevDepositScaleFactor = this.depositScaleFactor;
-        this.rewardFactor = this.baseInterestFactor/Math.sqrt(D*numValidators) + this.basePenaltyFactor * 2; 
 
         this.totalVoteUnscaled = 0;
         this.epoch = 0;
@@ -50,7 +50,7 @@ class Casper {
 	
 	initUniform(D) {
 		for(var i=0; i<this.numValidators; i++) {
-			this.validatorDeposits[i] = D / this.depositScaleFactor;
+			this.validatorDeposits[i] = D / Casper.INITIAL_SCALE_FACTOR;
 			this.validatorPrevDeposits[i] = this.validatorDeposits[i];
             this.validatorInitDeposits[i] = this.validatorDeposits[i];
 		}
@@ -142,11 +142,12 @@ class Casper {
 		
 		// update scale factor
         this.prevDepositScaleFactor = this.depositScaleFactor;
-		this.depositScaleFactor = this.depositScaleFactor * (1 + this.getCollectiveReward())/(1 + this.rewardFactor);
+		if(this.epoch > 1) this.depositScaleFactor = this.depositScaleFactor * (1 + this.getCollectiveReward())/(1 + this.rewardFactor);
 		
 		// update reward factor
-		this.rewardFactor = this.baseInterestFactor/Math.sqrt(this.getTotalDepositsUnscaled() * this.prevDepositScaleFactor) + this.basePenaltyFactor * this.getESF(); 
+		this.rewardFactor = this.baseInterestFactor/Math.sqrt(this.getTotalDepositsUnscaled() * this.prevDepositScaleFactor) + this.basePenaltyFactor * (this.getESF()-2); 
 		
+        
 		// update deposits
 		this.totalVoteUnscaled = 0;
 		for(var i=0; i<this.numValidators; i++) {
@@ -170,10 +171,10 @@ class Casper {
     }
     
     processEpochs(n) {
-        var z = this.numValidators - 1;
+        //var z = this.numValidators - 1;
         for(var i=0;i<n;i++) {
             this.processEpoch();
-            console.log(i+" "+this.depositScaleFactor+" "+this.validatorDeposits[z]);
+            //if(i<1000) console.log(i+" "+this.rewardFactor+" "+this.validatorDeposits[z]+" "+this.getScaledDeposit(z));
             //console.log((i+1./3)+" "+this.depositScaleFactor+" "+this.validatorDeposits[z]);
         }
     }
