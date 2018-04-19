@@ -8,9 +8,9 @@ class ResultDisplay {
         var canvas = document.getElementById('ResultCanvas');
         var context = canvas.getContext('2d');
         
-        var casperMC = new Casper(Casper.BASE_NUM_VALIDATORS, D * Casper.INITIAL_SCALE_FACTOR, type, f, alpha, beta);
+        var casperMC = new Casper(Casper.BASE_NUM_VALIDATORS, D, type, f, alpha, beta);
         casperMC.processEpochs(n);
-        var casperSF = new Casper(Casper.BASE_NUM_VALIDATORS, D * Casper.INITIAL_SCALE_FACTOR, type, 1-f, alpha, beta);
+        var casperSF = new Casper(Casper.BASE_NUM_VALIDATORS, D, type, 1-f, alpha, beta);
         casperSF.reverseDeposits(); // only needed for now disabled Pareto distribution of deposits
         casperSF.processEpochs(n);
         
@@ -52,6 +52,7 @@ class ResultDisplay {
         context.stroke();
         
         var numEpochsInYear = (365.25 * 24 * 3600) / SliderDisplay.SECONDS_PER_EPOCH;
+        console.log(1 + casperMC.getDepositChange(casperMC.numValidators-1)+" "+numEpochsInYear);
         var estimatedInterest = Math.pow(1 + casperMC.getDepositChange(casperMC.numValidators-1), numEpochsInYear/n);
         
         context.fillText("Estimates based on majority voter on main chain: ", 24, ResultDisplay.BASE_Y+162);

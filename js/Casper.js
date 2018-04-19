@@ -12,7 +12,7 @@ class Casper {
         this.depositScaleFactor = Casper.INITIAL_SCALE_FACTOR;
         // the initial value has some impact during the first epoch because it impacts the deposit factor rescale:
         this.prevDepositScaleFactor = this.depositScaleFactor;
-        this.rewardFactor = this.baseInterestFactor/Math.sqrt(D*numValidators * this.depositScaleFactor) + this.basePenaltyFactor * 2; 
+        this.rewardFactor = this.baseInterestFactor/Math.sqrt(D*numValidators) + this.basePenaltyFactor * 2; 
 
         this.totalVoteUnscaled = 0;
         this.epoch = 0;
@@ -51,7 +51,7 @@ class Casper {
 	initUniform(D) {
 		for(var i=0; i<this.numValidators; i++) {
 			this.validatorDeposits[i] = D / this.depositScaleFactor;
-			this.validatorPrevDeposits[i] = this.validatorDeposits[i] * this.depositScaleFactor;
+			this.validatorPrevDeposits[i] = this.validatorDeposits[i];
             this.validatorInitDeposits[i] = this.validatorDeposits[i];
 		}
 	}
@@ -59,7 +59,7 @@ class Casper {
 	initPareto(minDeposit, alpha, reversed) {
 		var revStore = [];
 		for(var i=0; i<this.numValidators; i++) {
-			this.validatorDeposits[i] = 15000/Math.pow(i+1, alpha);
+			this.validatorDeposits[i] = minDeposit/Math.pow(i+1, alpha);
 		}
 		var smallest = this.validatorDeposits[this.validatorDeposits.length-1];
 		for(i=0; i<this.numValidators; i++) {
@@ -170,10 +170,10 @@ class Casper {
     }
     
     processEpochs(n) {
-        //var z = this.numValidators - 1;
+        var z = this.numValidators - 1;
         for(var i=0;i<n;i++) {
             this.processEpoch();
-            //console.log(i+" "+this.depositScaleFactor+" "+this.validatorPrevDeposits[z]);
+            console.log(i+" "+this.depositScaleFactor+" "+this.validatorDeposits[z]);
             //console.log((i+1./3)+" "+this.depositScaleFactor+" "+this.validatorDeposits[z]);
         }
     }
