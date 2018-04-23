@@ -52,8 +52,7 @@ class ResultDisplay {
         context.stroke();
         
         var numEpochsInYear = (365.25 * 24 * 3600) / SliderDisplay.SECONDS_PER_EPOCH;
-        console.log(1 + casperMC.getDepositChange(casperMC.numValidators-1)+" "+numEpochsInYear);
-        var estimatedInterest = Math.pow(1 + casperMC.getDepositChange(casperMC.numValidators-1), numEpochsInYear/n);
+        var estimatedInterest = Math.pow(1 + casperMC.getDepositChange(casperMC.numValidators-1), numEpochsInYear/(n-1));
         
         context.fillText("Estimates based on majority voter on main chain: ", 24, ResultDisplay.BASE_Y+162);
         context.fillText("yearly interest: "+((estimatedInterest)-1)*100+"%", 30, ResultDisplay.BASE_Y+180);
